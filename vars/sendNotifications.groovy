@@ -19,7 +19,7 @@ def call(String buildStatus = 'STARTED') {
   if (buildStatus == 'STARTED') {
     color = 'YELLOW'
     colorCode = '#F1C750'
-  } else if (buildStatus == 'SUCCESS') {
+  } else if (buildStatus == 'SUCCESS' || buildStatus == 'FIXED') {
     color = 'GREEN'
     colorCode = '#34B787'
   }
