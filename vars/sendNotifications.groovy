@@ -24,14 +24,12 @@ def call(String buildStatus = 'STARTED') {
     colorCode = '#00FF00'
   }
 
-  if (buildStatus == 'FAILURE' || buildStatus == 'UNSTABLE' || buildStatus == 'FIXED') {
-    // Send notifications
-    slackSend (color: colorCode, message: summary)
+  // Send notifications
+  slackSend (color: colorCode, message: summary)
 
-    emailext (
-        subject: subject,
-        body: details,
-        recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']]
-      )
-  }
+  emailext (
+      subject: subject,
+      body: details,
+      recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']]
+    )
 }
