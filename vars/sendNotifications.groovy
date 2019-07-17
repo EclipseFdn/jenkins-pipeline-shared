@@ -24,7 +24,7 @@ def call(String buildStatus = 'STARTED') {
     colorCode = '#00FF00'
   }
 
-  if (buildStatus == 'FAILURE' || buildStatus == 'UNSTABLE' || buildStatus == 'FIXED')
+  if (buildStatus == 'FAILURE' || buildStatus == 'UNSTABLE' || buildStatus == 'FIXED') {
     // Send notifications
     slackSend (color: colorCode, message: summary)
 
