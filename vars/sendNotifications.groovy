@@ -7,8 +7,8 @@ import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
  */
 def call(RunWrapper currentBuild) {
   // build status of null means successful
-  buildStatus =  currentBuild.result ?: 'SUCCESS'
-  previousBuildStatus =  currentBuild.previousBuild?.result ?: 'SUCCESS'
+  def buildStatus =  currentBuild.result ?: 'SUCCESS'
+  def previousBuildStatus =  currentBuild.previousBuild?.result ?: 'SUCCESS'
 
   // Default values
   def colorCode = '#A20E10'
@@ -41,14 +41,14 @@ def call(RunWrapper currentBuild) {
   }
   
   if (subject != '') {
-    slackSend (color: colorCode, message: "*${subject}*: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}console|logs>)")
-
+    slackSend (color: colorCode, message: "*${subject}*: ${env.JOB_NAME} #${env.BUILD_NUMBER}, duration: ${currentBuild.durationString} (see <${env.BUILD_URL}console|logs>)")
+    
     emailext (
       subject: "${subject}: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
       body: """
         <p><a href='${env.BUILD_URL}console'>See console output at ${env.BUILD_URL}console</a></p>
         <p>----</p>
-        <pre>${currentBuild.rawBuild.log(128).join('<br/>')}</pre>
+        <pre>${currentBuild.rawBuild.log(128.intValue()).join('<br/>')}</pre>
       """,
       recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']]
     )
