@@ -48,7 +48,7 @@ def call(RunWrapper currentBuild) {
       body: """
         <p><a href='${env.BUILD_URL}console'>See console output at ${env.BUILD_URL}console</a></p>
         <p>----</p>
-        <pre>${currentBuild.rawBuild.getLog(128).join('<br/>')}</pre>
+        <pre style="white-space: pre-wrap;">${currentBuild.rawBuild.getLog(128).join('<br/>')}</pre>
       """,
       recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']]
     )
