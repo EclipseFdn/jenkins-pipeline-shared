@@ -41,7 +41,7 @@ def call(RunWrapper currentBuild) {
   }
   
   if (subject != '') {
-    slackSend (color: colorCode, message: "*${subject}*: ${env.JOB_NAME} #${env.BUILD_NUMBER}, duration: ${currentBuild.rawBuild.durationString} (see <${env.BUILD_URL}console|logs>)")
+    slackSend (color: colorCode, message: "*${subject}*: ${env.JOB_NAME} #${env.BUILD_NUMBER}, duration: ${currentBuild.durationString.minus(" and counting")} (see <${env.BUILD_URL}console|logs>)")
     
     emailext (
       subject: "${subject}: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
