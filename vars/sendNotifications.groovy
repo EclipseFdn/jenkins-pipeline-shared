@@ -41,12 +41,12 @@ def call(RunWrapper currentBuild) {
   }
   
   if (subject != '') {
-    slackSend (color: colorCode, message: "${env.JOB_NAME} ${env.BUILD_NUMBER} - ${subject} (<a href=\"${env.BUILD_URL}/console\">logs</a>)")
+    slackSend (color: colorCode, message: "*${subject}*: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}console|logs>)")
 
     emailext (
       subject: "${subject}: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
       body: """
-        <p><a href='${env.BUILD_URL}'>See console output at ${env.BUILD_URL}</a></p>
+        <p><a href='${env.BUILD_URL}console'>See console output at ${env.BUILD_URL}console</a></p>
         <p>----</p>
         <pre>${currentBuild.rawBuild.log(128).join('<br/>')}</pre>
       """,
