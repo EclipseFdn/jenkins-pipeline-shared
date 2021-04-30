@@ -8,7 +8,6 @@ def call(Map givenConfig = [:]) {
     "namespace": "foundation-internal-webdev-apps",
     "containerName": "nginx",
   ]
-
   def effectiveConfig = defaultConfig + givenConfig
 
   if (effectiveConfig.imageName == "") {
@@ -130,7 +129,7 @@ def call(Map givenConfig = [:]) {
               credentialsId: '6ad93d41-e6fc-4462-b6bc-297e360784fd',
               namespace: "${effectiveConfig.namespace}",
               selector: "app=${effectiveConfig.hostname},environment=${env.ENVIRONMENT}",
-              containerName: "${containerName}",
+              containerName: "${effectiveConfig.containerName}",
               newImageRef: "${effectiveConfig.imageName}:${env.TAG_NAME}"
             ])
           }
