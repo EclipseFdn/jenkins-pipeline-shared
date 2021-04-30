@@ -12,7 +12,7 @@ def call(Map givenConfig = [:]) {
     /**
      * Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. key1=value1,key2=value2)
      */
-    "selector=": "",
+    "selector": "",
     /**
      * Kind of resource to search for
      */
