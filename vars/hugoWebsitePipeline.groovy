@@ -122,11 +122,13 @@ def call(Map givenConfig = [:]) {
         when {
           environment name: 'ENVIRONMENT', value: 'production'
         }
-        withDockerRegistry([credentialsId: '04264967-fea0-40c2-bf60-09af5aeba60f', url: 'https://index.docker.io/v1/']) {
-          sh """
-            docker tag ${effectiveConfig.imageName}:${env.TAG_NAME} ${effectiveConfig.imageName}:latest
-            docker push ${effectiveConfig.imageName}:latest
-          """
+        steps {
+          withDockerRegistry([credentialsId: '04264967-fea0-40c2-bf60-09af5aeba60f', url: 'https://index.docker.io/v1/']) {
+            sh """
+              docker tag ${effectiveConfig.imageName}:${env.TAG_NAME} ${effectiveConfig.imageName}:latest
+              docker push ${effectiveConfig.imageName}:latest
+            """
+          }
         }
       }
 
