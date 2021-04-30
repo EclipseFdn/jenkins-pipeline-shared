@@ -11,7 +11,7 @@ def call(Map givenConfig = [:]) {
 
   def effectiveConfig = defaultConfig + givenConfig
 
-  if effectiveConfig.imageName == "" {
+  if (effectiveConfig.imageName == "") {
     effectiveConfig.imageName = "eclipsefdn/${effectiveConfig.hostname}"
   }
 
