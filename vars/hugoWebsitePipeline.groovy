@@ -100,6 +100,11 @@ def call(Map givenConfig = [:]) {
             docker build --no-cache --pull -t ${effectiveConfig.imageName}:${env.TAG_NAME} .
           """
         }
+        post {
+          always {
+            sh 'docker logout'
+          }
+        }
       }
 
       stage('Push docker image') {
@@ -119,6 +124,11 @@ def call(Map givenConfig = [:]) {
             """
           }
         }
+        post {
+          always {
+            sh 'docker logout'
+          }
+        }
       }
 
       stage('Tag and push image as latest') {
@@ -134,6 +144,11 @@ def call(Map givenConfig = [:]) {
               docker tag ${effectiveConfig.imageName}:${env.TAG_NAME} ${effectiveConfig.imageName}:latest
               docker push ${effectiveConfig.imageName}:latest
             """
+          }
+        }
+        post {
+          always {
+            sh 'docker logout'
           }
         }
       }
@@ -161,6 +176,7 @@ def call(Map givenConfig = [:]) {
 
     post {
       always {
+        // deleteDir() 
         sendNotifications currentBuild
       }
     }
