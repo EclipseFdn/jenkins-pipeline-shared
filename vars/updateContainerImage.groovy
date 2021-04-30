@@ -23,7 +23,7 @@ def call(Map givenConfig = [:]) {
   def effectiveConfig = defaultConfig + givenConfig
 
   withKubeConfig([credentialsId: effectiveConfig.credentialsId, serverUrl: effectiveConfig.serverUrl]) {
-    sh """
+    sh """#!/usr/bin/env bash
       resourcesJson="\$(kubectl get '${effectiveConfig.kind}' -n '${effectiveConfig.namespace}' -l '${effectiveConfig.selector}' -o json)"
       if [[ \$(jq -r '.items | length' <<<"\${resourcesJson}") -eq 0 ]]; then
         echo "ERROR: Unable to find a '${effectiveConfig.kind}' to patch matching selector '${effectiveConfig.selector}' in namespace '${effectiveConfig.namespace}'"
