@@ -91,7 +91,7 @@ def call(Map givenConfig = [:]) {
         }
         steps {
           sh """
-            docker build --pull --build-arg NGINX_IMAGE_TAG="${env.BASE_NGINX_IMAGE_TAG}" -t ${effectiveConfig.imageName}:${env.TAG_NAME} -t ${effectiveConfig.imageName}:latest .
+            docker build --no-cache --pull -t ${effectiveConfig.imageName}:${env.TAG_NAME} .
           """
         }
       }
@@ -110,9 +110,23 @@ def call(Map givenConfig = [:]) {
           withDockerRegistry([credentialsId: '04264967-fea0-40c2-bf60-09af5aeba60f', url: 'https://index.docker.io/v1/']) {
             sh """
               docker push ${effectiveConfig.imageName}:${env.TAG_NAME}
-              docker push ${effectiveConfig.imageName}:latest
             """
           }
+        }
+      }
+
+      stage('Tag and push image as latest') {
+        agent {
+          label 'docker-build'
+        }
+        when {
+          environment name: 'ENVIRONMENT', value: 'production'
+        }
+        withDockerRegistry([credentialsId: '04264967-fea0-40c2-bf60-09af5aeba60f', url: 'https://index.docker.io/v1/']) {
+          sh """
+            docker tag ${effectiveConfig.imageName}:${env.TAG_NAME} ${effectiveConfig.imageName}:latest
+            docker push ${effectiveConfig.imageName}:latest
+          """
         }
       }
 
