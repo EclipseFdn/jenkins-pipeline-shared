@@ -161,7 +161,7 @@ def call(Map givenConfig = [:]) {
 
     post {
       always {
-        //sendNotifications currentBuild
+        sendNotifications currentBuild
       }
     }
   }
