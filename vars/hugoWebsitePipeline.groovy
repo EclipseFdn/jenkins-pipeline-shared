@@ -6,6 +6,7 @@ def call(Map givenConfig = [:]) {
      */
     "imageName": "",
     "namespace": "foundation-internal-webdev-apps",
+    "kubeCredentialsId": "ci-bot-okd-c1-token",
     "containerName": "nginx",
   ]
   def effectiveConfig = defaultConfig + givenConfig
@@ -142,7 +143,7 @@ def call(Map givenConfig = [:]) {
         steps {
           container('kubectl') {
             updateContainerImage([
-              credentialsId: '6ad93d41-e6fc-4462-b6bc-297e360784fd',
+              credentialsId: "${effectiveConfig.kubeCredentialsId}",
               namespace: "${effectiveConfig.namespace}",
               selector: "app=${effectiveConfig.hostname},environment=${env.ENVIRONMENT}",
               containerName: "${effectiveConfig.containerName}",
@@ -155,6 +156,9 @@ def call(Map givenConfig = [:]) {
 
     post {
       always {
+        agent {
+          label 'docker-build'
+        }
         deleteDir() /* clean up workspace */
         //sendNotifications currentBuild
       }
