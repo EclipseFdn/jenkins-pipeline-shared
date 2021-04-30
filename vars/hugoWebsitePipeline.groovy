@@ -6,8 +6,13 @@ def call(Map givenConfig = [:]) {
      */
     "imageName": "",
     "namespace": "foundation-internal-webdev-apps",
-    "kubeCredentialsId": "ci-bot-okd-c1-token",
     "containerName": "nginx",
+
+    "dockerRegistryCredentialsId": "04264967-fea0-40c2-bf60-09af5aeba60f",
+    "dockerRegistryUrl": "https://index.docker.io/v1",
+
+    "kubeCredentialsId": "ci-bot-okd-c1-token",
+    "kubectlImage": "eclipsefdn/kubectl:okd-c1"
   ]
   def effectiveConfig = defaultConfig + givenConfig
 
@@ -19,13 +24,13 @@ def call(Map givenConfig = [:]) {
     agent {
       kubernetes {
         label 'kubedeploy-agent'
-        yaml '''
+        yaml """
         apiVersion: v1
         kind: Pod
         spec:
           containers:
           - name: kubectl
-            image: eclipsefdn/kubectl:okd-c1
+            image: ${effectiveConfig.kubectlImage}
             command:
             - cat
             tty: true
@@ -38,7 +43,7 @@ def call(Map givenConfig = [:]) {
               limits:
                 cpu: 1
                 memory: 1Gi
-        '''
+        """
       }
     }
 
@@ -108,7 +113,7 @@ def call(Map givenConfig = [:]) {
           }
         }
         steps {
-          withDockerRegistry([credentialsId: '04264967-fea0-40c2-bf60-09af5aeba60f', url: 'https://index.docker.io/v1/']) {
+          withDockerRegistry([credentialsId: effectiveConfig.dockerRegistryCredentialsId, url: effectiveConfig.dockerRegistryUrl]) {
             sh """
               docker push ${effectiveConfig.imageName}:${env.TAG_NAME}
             """
@@ -124,7 +129,7 @@ def call(Map givenConfig = [:]) {
           environment name: 'ENVIRONMENT', value: 'production'
         }
         steps {
-          withDockerRegistry([credentialsId: '04264967-fea0-40c2-bf60-09af5aeba60f', url: 'https://index.docker.io/v1/']) {
+          withDockerRegistry([credentialsId: effectiveConfig.dockerRegistryCredentialsId, url: effectiveConfig.dockerRegistryUrl]) {
             sh """
               docker tag ${effectiveConfig.imageName}:${env.TAG_NAME} ${effectiveConfig.imageName}:latest
               docker push ${effectiveConfig.imageName}:latest
@@ -156,10 +161,6 @@ def call(Map givenConfig = [:]) {
 
     post {
       always {
-        agent {
-          label 'docker-build'
-        }
-        deleteDir() /* clean up workspace */
         //sendNotifications currentBuild
       }
     }
