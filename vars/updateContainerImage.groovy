@@ -24,16 +24,16 @@ def call(Map givenConfig = [:]) {
 
   withKubeConfig([credentialsId: effectiveConfig.credentialsId, serverUrl: effectiveConfig.serverUrl]) {
     sh """
-      resourcesJson="$(kubectl get "${effectiveConfig.kind}" -n "${effectiveConfig.namespace}" -l "${effectiveConfig.selector}" -o json)"
-      if [[ $(jq -r '.items | length' <<<"\${resourcesJson}") -eq 0 ]]; then
+      resourcesJson='$(kubectl get '${effectiveConfig.kind}' -n '${effectiveConfig.namespace}' -l '${effectiveConfig.selector}' -o json)'
+      if [[ $(jq -r '.items | length' <<<\"\${resourcesJson}\") -eq 0 ]]; then
         echo "ERROR: Unable to find a '${effectiveConfig.kind}' to patch matching selector '${effectiveConfig.selector}' in namespace '${effectiveConfig.namespace}'"
         exit 1
       else 
-        firstResourceName="$(jq -r '.items[0].metadata.name' <<<"\${resourcesJson}")"
-        kubectl set image "${effectiveConfig.kind}/\${firstResourceName}" -n "${effectiveConfig.namespace}" "${effectiveConfig.containerName}=${effectiveConfig.newImageRef}" --record=true
-        if ! kubectl rollout status "${effectiveConfig.kind}/\${firstResourceName}" -n "${effectiveConfig.namespace}"; then
+        firstResourceName='$(jq -r '.items[0].metadata.name' <<<\"\${resourcesJson}\")'
+        kubectl set image \"${effectiveConfig.kind}/\${firstResourceName}\" -n '${effectiveConfig.namespace}' '${effectiveConfig.containerName}=${effectiveConfig.newImageRef}' --record=true
+        if ! kubectl rollout status \"${effectiveConfig.kind}/\${firstResourceName}\" -n '${effectiveConfig.namespace}'; then
           # will fail if rollout does not succeed in less than .spec.progressDeadlineSeconds
-          kubectl rollout undo "${effectiveConfig.kind}/\${firstResourceName}" -n "${effectiveConfig.namespace}"
+          kubectl rollout undo \"${effectiveConfig.kind}/\${firstResourceName}\" -n '${effectiveConfig.namespace}'
           exit 1
         fi
       fi
