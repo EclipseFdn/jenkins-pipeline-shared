@@ -1,8 +1,8 @@
 def call(Map givenConfig = [:]) {
   def defaultConfig = [
-    "hostname": "",
+    "appname": "",
     /**
-     * Default to eclipsefdn/${hostname} if not set
+     * Default to eclipsefdn/${appname} if not set
      */
     "imageName": "",
     "namespace": "foundation-internal-webdev-apps",
@@ -17,7 +17,7 @@ def call(Map givenConfig = [:]) {
   def effectiveConfig = defaultConfig + givenConfig
 
   if (effectiveConfig.imageName == "") {
-    effectiveConfig.imageName = "eclipsefdn/${effectiveConfig.hostname}"
+    effectiveConfig.imageName = "eclipsefdn/${effectiveConfig.appname}"
   }
 
   pipeline {
@@ -150,7 +150,7 @@ def call(Map givenConfig = [:]) {
             updateContainerImage([
               credentialsId: "${effectiveConfig.kubeCredentialsId}",
               namespace: "${effectiveConfig.namespace}",
-              selector: "app=${effectiveConfig.hostname},environment=${env.ENVIRONMENT}",
+              selector: "app=${effectiveConfig.appname},environment=${env.ENVIRONMENT}",
               containerName: "${effectiveConfig.containerName}",
               newImageRef: "${effectiveConfig.imageName}:${env.TAG_NAME}"
             ])
