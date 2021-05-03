@@ -97,7 +97,7 @@ def call(Map givenConfig = [:]) {
         }
         steps {
           sh """
-            docker build --no-cache --pull -t ${effectiveConfig.imageName}:${env.TAG_NAME} .
+            docker build --pull -t ${effectiveConfig.imageName}:${env.TAG_NAME} .
           """
         }
       }
