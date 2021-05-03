@@ -9,7 +9,7 @@ def call(Map givenConfig = [:]) {
     "containerName": "nginx",
 
     "dockerRegistryCredentialsId": "04264967-fea0-40c2-bf60-09af5aeba60f",
-    "dockerRegistryUrl": "https://index.docker.io/v1",
+    "dockerRegistryUrl": "https://index.docker.io/v1/",
 
     "kubeCredentialsId": "ci-bot-okd-c1-token",
     "kubectlImage": "eclipsefdn/kubectl:okd-c1"
