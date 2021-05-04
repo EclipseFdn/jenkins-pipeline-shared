@@ -38,11 +38,18 @@ def call(Map givenConfig = [:]) {
               limits:
                 cpu: 1
                 memory: 1Gi
+            volumeMounts:
+            - mountPath: "/home/default/.kube"
+              name: "dot-kube"
+              readOnly: false
           - name: jnlp
             resources:
               limits:
                 cpu: 1
                 memory: 1Gi
+        volumes:
+        - name: "dot-kube"
+          emptyDir: {}
         """
       }
     }
