@@ -103,9 +103,11 @@ def call(Map givenConfig = [:]) {
           label 'docker-build'
         }
         steps {
+          // Dockerfile will only be read from trusted branches. It will fail otherwise
+          // See https://www.jenkins.io/doc/pipeline/steps/workflow-multibranch/#readtrusted-read-trusted-file-from-scm
           readTrusted 'Dockerfile'
           sh """
-            docker build --pull --build-arg NGINX_IMAGE_TAG="${BASE_NGINX_IMAGE_TAG}" -t ${effectiveConfig.imageName}:${env.TAG_NAME} .
+            docker build --pull --build-arg NGINX_IMAGE_TAG="${BASE_NGINX_IMAGE_TAG}" -t "${effectiveConfig.imageName}:${env.TAG_NAME}" .
           """
         }
       }
@@ -123,7 +125,7 @@ def call(Map givenConfig = [:]) {
         steps {
           withDockerRegistry([credentialsId: effectiveConfig.dockerRegistryCredentialsId, url: effectiveConfig.dockerRegistryUrl]) {
             sh """
-              docker push ${effectiveConfig.imageName}:${env.TAG_NAME}
+              docker push "${effectiveConfig.imageName}:${env.TAG_NAME}"
             """
           }
         }
@@ -139,8 +141,8 @@ def call(Map givenConfig = [:]) {
         steps {
           withDockerRegistry([credentialsId: effectiveConfig.dockerRegistryCredentialsId, url: effectiveConfig.dockerRegistryUrl]) {
             sh """
-              docker tag ${effectiveConfig.imageName}:${env.TAG_NAME} ${effectiveConfig.imageName}:latest
-              docker push ${effectiveConfig.imageName}:latest
+              docker tag "${effectiveConfig.imageName}:${env.TAG_NAME}" "${effectiveConfig.imageName}:latest"
+              docker push "${effectiveConfig.imageName}:latest"
             """
           }
         }
