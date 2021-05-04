@@ -103,6 +103,7 @@ def call(Map givenConfig = [:]) {
           label 'docker-build'
         }
         steps {
+          readTrusted 'Dockerfile'
           sh """
             docker build --pull --build-arg NGINX_IMAGE_TAG="${BASE_NGINX_IMAGE_TAG}" -t ${effectiveConfig.imageName}:${env.TAG_NAME} .
           """
