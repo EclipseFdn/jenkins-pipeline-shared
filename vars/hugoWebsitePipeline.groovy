@@ -47,9 +47,9 @@ def call(Map givenConfig = [:]) {
               limits:
                 cpu: 1
                 memory: 1Gi
-        volumes:
-        - name: "dot-kube"
-          emptyDir: {}
+          volumes:
+          - name: "dot-kube"
+            emptyDir: {}
         """
       }
     }
