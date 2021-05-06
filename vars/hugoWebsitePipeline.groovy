@@ -111,7 +111,6 @@ def call(Map givenConfig = [:]) {
           }
 
           sh """
-            head Dockerfile
             docker build --pull --build-arg NGINX_IMAGE_TAG="${BASE_NGINX_IMAGE_TAG}" --build-arg BUILDER_IMAGE_TAG="${effectiveConfig.builderImageTag}" -t "${effectiveConfig.imageName}:${env.TAG_NAME}" .
           """
         }
