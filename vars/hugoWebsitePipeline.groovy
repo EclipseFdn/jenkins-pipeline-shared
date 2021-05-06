@@ -8,7 +8,7 @@ def call(Map givenConfig = [:]) {
     "namespace": "foundation-internal-webdev-apps",
     "containerName": "nginx",
 
-    "builderImageTag": "latest"
+    "builderImageTag": "latest",
 
     "dockerRegistryCredentialsId": "04264967-fea0-40c2-bf60-09af5aeba60f",
     "dockerRegistryUrl": "https://index.docker.io/v1/",
