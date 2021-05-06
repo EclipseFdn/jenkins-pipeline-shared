@@ -105,8 +105,10 @@ def call(Map givenConfig = [:]) {
           label 'docker-build'
         }
         steps {
-          def dockerfileContents = libraryResource "org/eclipsefdn/hugoWebsite/Dockerfile"
-          writeFile file: "Dockerfile", text: dockerfileContents
+          script {
+            def dockerfileContents = libraryResource "org/eclipsefdn/hugoWebsite/Dockerfile"
+            writeFile file: "Dockerfile", text: dockerfileContents
+          }
 
           sh """
             head Dockerfile
