@@ -8,6 +8,8 @@ def call(Map givenConfig = [:]) {
     "namespace": "foundation-internal-webdev-apps",
     "containerName": "nginx",
 
+    "builderImageTag": "latest"
+
     "dockerRegistryCredentialsId": "04264967-fea0-40c2-bf60-09af5aeba60f",
     "dockerRegistryUrl": "https://index.docker.io/v1/",
 
@@ -103,11 +105,12 @@ def call(Map givenConfig = [:]) {
           label 'docker-build'
         }
         steps {
-          // Dockerfile will only be read from trusted branches. It will fail otherwise
-          // See https://www.jenkins.io/doc/pipeline/steps/workflow-multibranch/#readtrusted-read-trusted-file-from-scm
-          readTrusted 'Dockerfile'
+          def dockerfileContents = libraryResource "org/eclipsefdn/hugoWebsite/Dockerfile"
+          writeFile file: "Dockerfile", text: dockerfileContents
+
           sh """
-            docker build --pull --build-arg NGINX_IMAGE_TAG="${BASE_NGINX_IMAGE_TAG}" -t "${effectiveConfig.imageName}:${env.TAG_NAME}" .
+            head Dockerfile
+            docker build --pull --build-arg NGINX_IMAGE_TAG="${BASE_NGINX_IMAGE_TAG}" --build-arg BUILDER_IMAGE_TAG="${effectiveConfig.builderImageTag}" -t "${effectiveConfig.imageName}:${env.TAG_NAME}" .
           """
         }
       }
