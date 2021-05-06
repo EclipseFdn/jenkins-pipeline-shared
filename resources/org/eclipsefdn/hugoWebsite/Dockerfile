@@ -10,7 +10,7 @@ WORKDIR /workdir
 COPY . /workdir/
 
 RUN npm --unsafe-perm ci \
-    && hugo
+    && hugo --gc --minify
 
 FROM eclipsefdn/nginx:${NGINX_IMAGE_TAG}
 
