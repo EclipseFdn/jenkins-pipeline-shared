@@ -14,6 +14,7 @@ def call(Map givenConfig = [:]) {
     "dockerRegistryUrl": "https://index.docker.io/v1/",
 
     "kubeCredentialsId": "ci-bot-okd-c1-token",
+    "kubeServerUrl": "https://api.okd-c1.eclipse.org:6443",
     "kubectlImage": "eclipsefdn/kubectl:okd-c1"
   ]
   def effectiveConfig = defaultConfig + givenConfig
@@ -163,6 +164,7 @@ def call(Map givenConfig = [:]) {
           container('kubectl') {
             updateContainerImage([
               credentialsId: "${effectiveConfig.kubeCredentialsId}",
+              serverUrl: "${effectiveConfig.kubeServerUrl}"
               namespace: "${effectiveConfig.namespace}",
               selector: "app=${effectiveConfig.appname},environment=${env.ENVIRONMENT}",
               containerName: "${effectiveConfig.containerName}",

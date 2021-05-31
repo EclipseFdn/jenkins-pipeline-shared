@@ -3,7 +3,7 @@ def call(Map givenConfig = [:]) {
     /**
       * The Jenkins node, or label, that will be allocated for this build.
       */
-    "credentialsId": "",
+    "credentialsId": "ci-bot-okd-c1-token",
     /**
       * All config specific to NPM repo type.
       */
