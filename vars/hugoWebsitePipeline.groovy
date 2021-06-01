@@ -164,7 +164,7 @@ def call(Map givenConfig = [:]) {
           container('kubectl') {
             updateContainerImage([
               credentialsId: "${effectiveConfig.kubeCredentialsId}",
-              serverUrl: "${effectiveConfig.kubeServerUrl}"
+              serverUrl: "${effectiveConfig.kubeServerUrl}",
               namespace: "${effectiveConfig.namespace}",
               selector: "app=${effectiveConfig.appname},environment=${env.ENVIRONMENT}",
               containerName: "${effectiveConfig.containerName}",
