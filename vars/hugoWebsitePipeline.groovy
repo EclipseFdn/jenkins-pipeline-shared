@@ -111,6 +111,8 @@ def call(Map givenConfig = [:]) {
             if (effectiveConfig.dockerfile != "") {
               def dockerfileContents = libraryResource "org/eclipsefdn/hugoWebsite/Dockerfile"
               writeFile file: "Dockerfile", text: dockerfileContents
+            } else {
+              readTrusted effectiveConfig.dockerfile
             }
           }
 
