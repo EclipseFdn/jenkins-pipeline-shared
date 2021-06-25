@@ -108,7 +108,7 @@ def call(Map givenConfig = [:]) {
         }
         steps {
           script {
-            if (effectiveConfig.dockerfile != "") {
+            if ("".equals(effectiveConfig.dockerfile)) {
               def dockerfileContents = libraryResource "org/eclipsefdn/hugoWebsite/Dockerfile"
               writeFile file: "Dockerfile", text: dockerfileContents
             } else {
