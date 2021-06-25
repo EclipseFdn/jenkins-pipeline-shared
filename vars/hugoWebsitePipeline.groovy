@@ -61,7 +61,7 @@ def call(Map givenConfig = [:]) {
     environment {
       ENVIRONMENT = sh(
         script: """
-          if [ "${env.BRANCH_NAME}" = "master" ]; then
+          if [ "${env.BRANCH_NAME}" = "master" || "${env.BRANCH_NAME}" = "main" ]; then
             printf "production"
           else
             printf "${env.BRANCH_NAME}"
