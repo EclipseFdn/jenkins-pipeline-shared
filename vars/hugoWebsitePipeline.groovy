@@ -10,6 +10,7 @@ def call(Map givenConfig = [:]) {
 
     "builderImageTag": "latest",
 
+    "dockerfile": "",
     "dockerRegistryCredentialsId": "04264967-fea0-40c2-bf60-09af5aeba60f",
     "dockerRegistryUrl": "https://index.docker.io/v1/",
 
@@ -107,8 +108,10 @@ def call(Map givenConfig = [:]) {
         }
         steps {
           script {
-            def dockerfileContents = libraryResource "org/eclipsefdn/hugoWebsite/Dockerfile"
-            writeFile file: "Dockerfile", text: dockerfileContents
+            if (effectiveConfig.dockerfile != "") {
+              def dockerfileContents = libraryResource "org/eclipsefdn/hugoWebsite/Dockerfile"
+              writeFile file: "Dockerfile", text: dockerfileContents
+            }
           }
 
           sh """
