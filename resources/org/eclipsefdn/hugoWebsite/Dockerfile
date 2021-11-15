@@ -9,7 +9,7 @@ FROM eclipsefdn/hugo-node:${BUILDER_IMAGE_TAG} AS builder
 WORKDIR /workdir
 COPY . /workdir/
 
-RUN if [ -e yarn.lock ]; then yarn install --frozen-lockfile; echo 'yarn'; elif [ -e package-lock.json ]; then npm --unsafe-perm ci; fi; \
+RUN if [ -e yarn.lock ]; then yarn install --frozen-lockfile; elif [ -e package-lock.json ]; then npm --unsafe-perm ci; fi; \
     hugo --gc --minify
 
 FROM eclipsefdn/nginx:${NGINX_IMAGE_TAG}
