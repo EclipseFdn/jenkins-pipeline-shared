@@ -14,4 +14,4 @@ RUN if [ -e yarn.lock ]; then yarn install --frozen-lockfile; elif [ -e package-
 
 FROM eclipsefdn/nginx:${NGINX_IMAGE_TAG}
 
-COPY --from=builder /workgitdir/public/ /usr/share/nginx/html/
+COPY --from=builder /workdir/public/ /usr/share/nginx/html/
