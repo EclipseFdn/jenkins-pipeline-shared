@@ -1,5 +1,5 @@
 ARG BUILDER_IMAGE_TAG=latest
-ARG NGINX_IMAGE_TAG=stable-alpine-for-hugo
+ARG NGINX_IMAGE_TAG=stable-alpine
 
 FROM eclipsefdn/hugo-node:${BUILDER_IMAGE_TAG} AS builder
 # See https://github.com/EclipseFdn/dockerfiles/tree/master/hugo-node
