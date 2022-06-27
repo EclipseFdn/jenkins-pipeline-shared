@@ -28,10 +28,10 @@ def call(Map givenConfig = [:]) {
       if [[ \$(jq -r '.items | length' <<<"\${resourcesJson}") -eq 0 ]]; then
         echo "ERROR: Unable to find a '${effectiveConfig.kind}' to patch matching selector '${effectiveConfig.selector}' in namespace '${effectiveConfig.namespace}'"
         exit 1
-      else 
+      else
         firstResourceName="\$(jq -r '.items[0].metadata.name' <<<"\${resourcesJson}")"
         kubectl set image "${effectiveConfig.kind}/\${firstResourceName}" -n '${effectiveConfig.namespace}' '${effectiveConfig.containerName}=${effectiveConfig.newImageRef}' --record=true
-        if ! kubectl rollout status "${effectiveConfig.kind}/\${firstResourceName}" -n '${effectiveConfig.namespace}'; then
+        if ! grep -q "cronjob" <<<"${effectiveConfig.kind}" && ! kubectl rollout status "${effectiveConfig.kind}/\${firstResourceName}" -n '${effectiveConfig.namespace}'; then
           # will fail if rollout does not succeed in less than .spec.progressDeadlineSeconds
           kubectl rollout undo "${effectiveConfig.kind}/\${firstResourceName}" -n '${effectiveConfig.namespace}'
           exit 1
